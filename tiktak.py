@@ -16,7 +16,7 @@ def inp(player):
         except:
             print("Incorrect number")
             continue
-        if player_resp >= 1 and player_resp <= 9:
+        if player_resp in range(1, 10):
             if (str(board[player_resp - 1])) not in "XO":
                 board[player_resp - 1] = player
                 break
