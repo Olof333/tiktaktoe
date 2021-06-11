@@ -14,10 +14,10 @@ class PlayerFigure(Enum):
 
 
 class Board:
-    def __init__(self) -> None:
-        n = input("Set size of the matrix ")
+    def __init__(self, n: int) -> None:
+        self.n = n
         self.grid: list[list[Optional[PlayerFigure]]] = [
-            [None for _ in range(n)] for _ in range(n)
+            [None for _ in range(self.n)] for _ in range(self.n)
         ]
 
     def set_element(self, loc: tuple[int, int], elem: PlayerFigure) -> None:
@@ -27,11 +27,11 @@ class Board:
 
     def has_won(self) -> bool:
         for row in self.grid:
-            for i in range(self.n):
-                if row[self.n] == row[self.n + 1] == row[self.n + 2] != None:
+            for i in range(self.n - 2):
+                if row[i] == row[i + 1] == row[i + 2] != None:
                     return True
         for col in range(self.n):
-            for j in range(self.n):
+            for j in range(self.n - 2):
                 if (
                     self.grid[j][col]
                     == self.grid[j + 1][col]
@@ -54,12 +54,13 @@ class Board:
             "|".join(str(elem) if elem is not None else " " for elem in row)
             for row in self.grid
         ]
-        print("\n-----\n".join(data))
+        k = "\n" + ((self.n * 2 - 1) * "-") + "\n"
+        print(k.join(data))
 
 
 class Game:
     def __init__(self) -> None:
-        self.board = Board()
+        self.board = Board(int(input("Set size of the matrix ")))
         self.current_turn = PlayerFigure.x
 
     def turn(self) -> None:
@@ -67,7 +68,7 @@ class Game:
         try:
             x, y = player_turn.split(" ")
             x, y = int(x), int(y)
-        except:
+        except ValueError:
             print("Invalid input")
             return self.turn()
 
@@ -101,7 +102,11 @@ class Game:
 def main() -> None:
     print("Starting a new game!")
     while True:
-        game = Game()
+        try:
+            game = Game()
+        except Exception as e:
+            print(e)
+            continue
         game.start()
 
 
