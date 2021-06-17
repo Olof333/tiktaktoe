@@ -1,5 +1,6 @@
 from enum import Enum
 from typing import Counter, Optional
+import json
 
 
 class PlayerFigure(Enum):
@@ -13,9 +14,22 @@ class PlayerFigure(Enum):
         return str(self)
 
 
+class Config:
+    def __init__(self) -> None:
+        self.update()
+
+    def update(self) -> None:
+        with open("config.json", "r") as read_file:
+            data = json.load(read_file)
+            self.dimension = data["dimension"]
+
+
+config = Config()
+
+
 class Board:
-    def __init__(self, n: int) -> None:
-        self.n = n
+    def __init__(self) -> None:
+        self.n = config.dimension
         self.grid: list[list[Optional[PlayerFigure]]] = [
             [None for _ in range(self.n)] for _ in range(self.n)
         ]
@@ -60,7 +74,7 @@ class Board:
 
 class Game:
     def __init__(self) -> None:
-        self.board = Board(int(input("Set size of the matrix ")))
+        self.board = Board()
         self.current_turn = PlayerFigure.x
 
     def turn(self) -> None:
@@ -103,6 +117,7 @@ def main() -> None:
     print("Starting a new game!")
     while True:
         try:
+            config.update()
             game = Game()
         except Exception as e:
             print(e)
