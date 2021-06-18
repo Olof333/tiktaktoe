@@ -1,3 +1,4 @@
 {
-    "dimension": 3
+    "dimension": 5,
+    "comb_to_win": 2
 }
