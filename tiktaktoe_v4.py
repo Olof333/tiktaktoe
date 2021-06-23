@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Counter, Optional
+from typing import Optional
 import json
 import time
 
